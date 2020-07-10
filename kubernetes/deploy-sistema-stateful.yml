@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: aplicacao-sistema-statefulset
+spec:
+  serviceName: aplicacao-sistema-statefulset
+  selector:
+    matchLabels:
+      name: aplicacao-sistema-pod-statefulset
+  template:
+    metadata:
+      labels:
+        name: aplicacao-sistema-pod-statefulset
+    spec:
+      containers:
+        - name: container-aplicacao-sistema-statefulset
+          image: bernardcg/noticia-alura:sv1
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: imagens
+              mountPath: /var/www/html/uploads
+            - name: sessoes
+              mountPath: /tmp
+      volumes:
+        - name: imagens
+          persistentVolumeClaim:
+            claimName: permissao-imagens
+        - name: sessoes
+          persistentVolumeClaim:
+            claimName: permissao-sessao
+
+---
+# ===========
+# = Volumes =
+# ===========
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: permissao-sessao
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: permissao-imagens
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+# ==============
+# = Service LB =
+# ==============
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: servico-aplicacao-sistema-statefulset
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      nodePort: 31115
+  selector:
+    name: aplicacao-sistema-pod-statefulset
