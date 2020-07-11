@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: container-aplicacao-sistema-statefulset
-          image: bernardcg/noticia-alura:sv1
+          image: bernardcg/noticia-alura:sv2
           ports:
             - containerPort: 80
           volumeMounts:
@@ -22,6 +22,10 @@ spec:
               mountPath: /var/www/html/uploads
             - name: sessoes
               mountPath: /tmp
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sh","notificacao.sh"]
       volumes:
         - name: imagens
           persistentVolumeClaim:

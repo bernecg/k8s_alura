@@ -13,9 +13,16 @@ spec:
     spec:
       containers:
         - name: container-aplicacao
-          image: bernardcg/noticia-alura:nv1
+          image: bernardcg/noticia-alura:nv2
+          resources:
+            requests:
+              cpu: 400m
           ports:
             - containerPort: 80
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sh","notificacao.sh"]
 
 ---
 # ==============
