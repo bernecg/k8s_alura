@@ -13,12 +13,15 @@ spec:
     spec:
       containers:
         - name: container-aplicacao
-          image: bernardcg/noticia-alura:nv2
+          image: bernardcg/noticia-alura:nv3
           resources:
             requests:
               cpu: 400m
           ports:
             - containerPort: 80
+          env:
+            - name: SLACK_URL
+              value: <VALUE>
           lifecycle:
             postStart:
               exec:

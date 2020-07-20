@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: container-aplicacao-sistema-statefulset
-          image: bernardcg/noticia-alura:sv2
+          image: bernardcg/noticia-alura:sv3
           ports:
             - containerPort: 80
           volumeMounts:
@@ -22,6 +22,9 @@ spec:
               mountPath: /var/www/html/uploads
             - name: sessoes
               mountPath: /tmp
+          env:
+            - name: SLACK_URL
+              value: <VALUE>
           lifecycle:
             postStart:
               exec:
