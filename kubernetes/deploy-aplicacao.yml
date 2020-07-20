@@ -21,7 +21,10 @@ spec:
             - containerPort: 80
           env:
             - name: SLACK_URL
-              value: <VALUE>
+              valueFrom:
+                configMapKeyRef:
+                  name: dev-config
+                  key: slack.url
           lifecycle:
             postStart:
               exec:
